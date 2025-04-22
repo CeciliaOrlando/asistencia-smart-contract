@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.3.0"
+  },
+  "name": "asistencia-smart-contract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.23.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CeciliaOrlando/asistencia-smart-contract.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CeciliaOrlando/asistencia-smart-contract/issues"
+  },
+  "homepage": "https://github.com/CeciliaOrlando/asistencia-smart-contract#readme"
+}
