@@ -1,23 +1,23 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+// SPDX-License-Identifier: MIT       Licencia del contrato - MIT una de las mas abiertas y usadas
+pragma solidity ^0.8.20;  // Compilador de Solidity
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol"; // 
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol"; // Importa la definición del contrato ERC20 desde la librería OpenZeppelin. Voy a poder crear un token (como si fuera una moneda digital) sin tener que programarlo desde cero. Puedo Crear tokens, Transferirlos, Consultar saldos,etc.
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol"; // Importa la definición del contrato AccessControl desde la librería OpenZeppelin que permite manejar roles y permisos. Permite que el "profesor" pueda hacer algunas cosas y los "alumnos" otras.
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; // Importa la definición del contrato ReentrancyGuard desde la librería OpenZeppelin que permite evitar el reentrancy. que es como si alguien intentara "aprovechar un error" y ejecutar varias veces una función antes de que termine la anterior. Con ReentrancyGuard, te asegurás de que las funciones importantes se ejecuten una sola vez por turno, como deberían.
 
-contract Asistencia is ERC20, AccessControl, ReentrancyGuard {
+contract Asistencia is ERC20, AccessControl, ReentrancyGuard { //con el is se heredan las caracteristicas de los contratos ERC20, AccessControl y ReentrancyGuard
 
-    bytes32 public constant PROFE_ROLE = keccak256("PROFE_ROLE");
+    bytes32 public constant PROFE_ROLE = keccak256("PROFE_ROLE"); // bytes32 Este es el tipo de dato. Significa que la variable va a guardar un valor de 32 bytes (256 bits). public Es un modificador de visibilidad. Significa que esta variable puede ser leída desde fuera del contrato (por otras funciones o por usuarios desde interfaces como Remix o Web3). constant Esto indica que el valor de esta variable es constante, es decir, no va a cambiar nunca después de ser definida. Se fija en el momento del despliegue del contrato. Ahorra gas porque no necesita guardarse en almacenamiento (solo en el bytecode). PROFE_ROLE Este es el nombre de la variable. Por convención, los nombres de constantes en Solidity se escriben en mayúsculas y con guiones bajos.  keccak256("PROFE_ROLE") Esto es una función hash que genera un valor único de 32 bytes a partir del string "PROFE_ROLE". keccak256(...) es la función de hash criptográfica estándar en Solidity (similar a SHA3). "PROFE_ROLE" es un string literal que se va a hashear. ¿Por qué se usa? En contratos de control de acceso (como con OpenZeppelin), se utiliza este hash como un identificador único para un rol. Por ejemplo, para saber si alguien tiene el rol de "PROFE".
 
-    struct Session {
-        bytes32 hash;
-        uint256 deadline;
-        bool activa;
+    struct Session {  // Estructura para representar una sesión. Un struct es como un molde para crear "objetos" con varias propiedades
+        bytes32 hash; // bytes32 Este es el tipo de dato. Significa que la variable va a guardar un valor de 32 bytes (256 bits).
+        uint256 deadline; // unit256 Este es el tipo de dato. Significa que la variable va a guardar un valor de 256 bits. deadline La fecha límite para reclamar tokens, probablemente como una marca de tiempo Unix (block.timestamp), después de la cual la sesión ya no es válida.
+        bool activa; // bool tipo de dato que significa que la variable va a guardar un valor booleano (true o false).Indica si la sesión está activa o no.
     }
 
-    mapping(uint256 => Session) public sesiones;
-    mapping(address => bool) public alumnosPermitidos;
-    uint256 private sessionCounter;
+    mapping(uint256 => Session) public sesiones; // mapping(address => bool) public alumnosPermitidosEste es un diccionario que relaciona un número (el ID de la sesión) con una estructura Session. Sirve para guardar todas las sesiones, y se puede acceder a cada una usando su ID (por ejemplo, 1, 2, 3...). Ejemplo: sesiones[1] te devuelve los datos de la sesión con ID 1. Como es public, se puede consultar directamente desde fuera del contrato.;
+     mapping(address => bool)
+    uint256 private sessionCounter; // Relaciona una dirección Ethereum (wallet) con un booleano. Indica si una dirección está permitida o no para participar en las sesiones (por ejemplo, si es un alumno autorizado). Ejemplo: alumnosPermitidos[0xABC...] == true significa que esa dirección está habilitada.
     mapping(uint256 => mapping(address => bool)) public haReclamado;
 
     event AlumnoRegistrado(address indexed alumno);
